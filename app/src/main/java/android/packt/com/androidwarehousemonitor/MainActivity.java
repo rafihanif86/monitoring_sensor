@@ -27,9 +27,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.content.ContextCompat;
+//import android.support.v7.app.AppCompatActivity;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -78,13 +78,7 @@ import static androidx.constraintlayout.motion.widget.Debug.getLocation;
 
 //batas program baru
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
-    //program baru
-    private GoogleMap mMap;
-    private DatabaseReference databaseReference;
-    //private LocationListener locationListener;
-    //private LocationManager locationManager;
-    private final long  MIN_TIME= 1000;
-    private final long MIN_DIST= 5;
+
 
     //@Override
     //protected void onCreate(Bundle savedInstanceState){
@@ -124,8 +118,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     TextView textView5,textView6,textView7,textView8,textView9;
     FusedLocationProviderClient fusedLocationProviderClient;
 
+    //maps config
+    private GoogleMap mMap;
+
+    private DatabaseReference databaseReference;
+    private LocationListener locationListener;
+
+    private LocationManager locationManager;
+    private final long MIN_TIME = 1000;
+    private final long MIN_DIST = 5;
+
+    private EditText editTextLatitude;
+    private EditText editTextLongitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // add text field
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btLocation = findViewById(R.id.bt_location);
@@ -204,6 +212,73 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+//         Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+                try {
+                    editTextLatitude.setText(Double.toString(location.getLatitude()));
+                    editTextLongitude.setText(Double.toString(location.getLongitude()));
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        try {
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, locationListener);
+
+        }
+        catch (Exception e){
+
+            e.printStackTrace();
+        }
+
     }
 
     @SuppressLint("MissingPermission")
