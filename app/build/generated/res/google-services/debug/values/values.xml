@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">951394864304-vdn0qio9a6jlejjpmdtn3ms29t4t8pg6.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://deteksi-d4c8d.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">951394864304</string>
+    <string name="google_api_key" translatable="false">AIzaSyDHZVvXLLnBNUTjMfmaMSwMh_bzCiI9a14</string>
+    <string name="google_app_id" translatable="false">1:951394864304:android:07c627016e61d34817ff75</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDHZVvXLLnBNUTjMfmaMSwMh_bzCiI9a14</string>
+    <string name="google_storage_bucket" translatable="false">deteksi-d4c8d.appspot.com</string>
+    <string name="project_id" translatable="false">deteksi-d4c8d</string>
+</resources>

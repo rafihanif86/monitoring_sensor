@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "951394864304",
+    "firebase_url": "https://deteksi-d4c8d.firebaseio.com",
+    "project_id": "deteksi-d4c8d",
+    "storage_bucket": "deteksi-d4c8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951394864304:android:07c627016e61d34817ff75",
+        "android_client_info": {
+          "package_name": "android.packt.com.androidwarehousemonitor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951394864304-vdn0qio9a6jlejjpmdtn3ms29t4t8pg6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHZVvXLLnBNUTjMfmaMSwMh_bzCiI9a14"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951394864304-vdn0qio9a6jlejjpmdtn3ms29t4t8pg6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
