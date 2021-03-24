@@ -128,6 +128,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private final long MIN_TIME = 1000;
     private final long MIN_DIST = 5;
 
+    private double latitudeNow;
+    private double longitudeNow;
+    private String markerTittleNow;
+
     private EditText editTextLatitude;
     private EditText editTextLongitude;
 
@@ -214,28 +218,78 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+    @SuppressLint("MissingPermission")
+    private void getLocation() {
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                //initialize location
+                final Location location = task.getResult();
+                if (location != null) {
+                    try {
+                        Geocoder geocoder = new Geocoder(MainActivity.this,
+                                Locale.getDefault());
+
+
+                        //initialize address
+                        List<Address> addresses = geocoder.getFromLocation(
+                                location.getLatitude(), location.getLongitude(), 1
+                        );
+
+                        latitudeNow = addresses.get(0).getLatitude();
+                        longitudeNow = addresses.get(0).getLongitude();
+                        markerTittleNow = addresses.get(0).getLocality() + ", " +  addresses.get(0).getCountryName();
+
+                        //set latitude on text view
+                        textView5.setText(Html.fromHtml(
+                                "<font color='#6200EE'><b>Latitude :</b><br></font>"
+                                        + latitudeNow
+                        ));
+                        //set longitude on text view
+                        textView6.setText(Html.fromHtml(
+                                "<font color='#6200EE'><b>Longitude :</b><br></font>"
+                                        + longitudeNow
+                        ));
+                        //set country name
+                        textView7.setText(Html.fromHtml(
+                                "<font color='#6200EE'><b>Country Name :</b><br></font>"
+                                        + addresses.get(0).getCountryName()
+                        ));
+                        //set locality
+                        textView8.setText(addresses.get(0).getLocality());
+                        //set address
+                        Log.d("Lokasi", addresses.get(0).getLocality());
+                        textView9.setText(Html.fromHtml(
+                                "<font color='#6200EE'><b>Address :</b><br></font>"
+                                        + addresses.get(0).getAddressLine(0)
+                        ));
+
+                        LatLng now = new LatLng(latitudeNow, longitudeNow);
+                        mMap.addMarker(new MarkerOptions().position(now).title(markerTittleNow));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(now));
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    // override marker position
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
 //         Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng now = new LatLng(latitudeNow, longitudeNow);
+//        mMap.addMarker(new MarkerOptions().position(now).title(markerTittleNow));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(now));
 
 
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
-                try {
-                    editTextLatitude.setText(Double.toString(location.getLatitude()));
-                    editTextLongitude.setText(Double.toString(location.getLongitude()));
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
 
             }
 
@@ -279,53 +333,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
-    }
-
-    @SuppressLint("MissingPermission")
-    private void getLocation() {
-        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                //initialize location
-                final Location location = task.getResult();
-                if (location != null) {
-                    try {
-                        Geocoder geocoder = new Geocoder(MainActivity.this,
-                                Locale.getDefault());
-
-                        //initialize address
-                        List<Address> addresses = geocoder.getFromLocation(
-                                location.getLatitude(), location.getLongitude(), 1
-                        );
-                        //set latitude on text view
-                        textView5.setText(Html.fromHtml(
-                                "<font color='#6200EE'><b>Latitude :</b><br></font>"
-                                        + addresses.get(0).getLatitude()
-                        ));
-                        //set longitude on text view
-                        textView6.setText(Html.fromHtml(
-                                "<font color='#6200EE'><b>Longitude :</b><br></font>"
-                                        + addresses.get(0).getLongitude()
-                        ));
-                        //set country name
-                        textView7.setText(Html.fromHtml(
-                                "<font color='#6200EE'><b>Country Name :</b><br></font>"
-                                        + addresses.get(0).getCountryName()
-                        ));
-                        //set locality
-                        textView8.setText(addresses.get(0).getLocality());
-                        //set address
-                        Log.d("Lokasi", addresses.get(0).getLocality());
-                        textView9.setText(Html.fromHtml(
-                                "<font color='#6200EE'><b>Address :</b><br></font>"
-                                        + addresses.get(0).getAddressLine(0)
-                        ));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
     }
 
     @Override
