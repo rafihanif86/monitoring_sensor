@@ -37,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.content.ContextCompat;
 
+import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //initialize variable
     Button btLocation;
-    TextView textView5,textView6,textView7,textView8,textView9;
+    TextView textView5, textView6, textView7, textView8, textView9;
     FusedLocationProviderClient fusedLocationProviderClient;
 
     //maps config
@@ -135,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private EditText editTextLatitude;
     private EditText editTextLongitude;
 
+    LogBook logBook;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // add text field
@@ -147,7 +150,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         textView8 = findViewById(R.id.text_view8);
         textView9 = findViewById(R.id.text_view9);
 
-        //program baru
+        // create id device
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        logBook.setIdDevice(telephonyManager.getDeviceId());
+
+        //program baru Maps
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -156,7 +173,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         databaseReference=FirebaseDatabase.getInstance().getReference("Location");
         databaseReference.addValueEventListener(new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -208,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                     //when permission granted
                     getLocation();
-
                 }else{
                     //when permission denied
                     ActivityCompat.requestPermissions(MainActivity.this,
@@ -230,7 +245,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Geocoder geocoder = new Geocoder(MainActivity.this,
                                 Locale.getDefault());
 
-
                         //initialize address
                         List<Address> addresses = geocoder.getFromLocation(
                                 location.getLatitude(), location.getLongitude(), 1
@@ -239,6 +253,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         latitudeNow = addresses.get(0).getLatitude();
                         longitudeNow = addresses.get(0).getLongitude();
                         markerTittleNow = addresses.get(0).getLocality() + ", " +  addresses.get(0).getCountryName();
+
+                        logBook.setLatitude(latitudeNow);
+                        logBook.setLongitude(longitudeNow);
 
                         //set latitude on text view
                         textView5.setText(Html.fromHtml(
@@ -264,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         + addresses.get(0).getAddressLine(0)
                         ));
 
+//                        mengubah lokasi marker
                         LatLng now = new LatLng(latitudeNow, longitudeNow);
                         mMap.addMarker(new MarkerOptions().position(now).title(markerTittleNow));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(now));
@@ -285,7 +303,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        LatLng now = new LatLng(latitudeNow, longitudeNow);
 //        mMap.addMarker(new MarkerOptions().position(now).title(markerTittleNow));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(now));
-
 
         locationListener = new LocationListener() {
             @Override
@@ -323,13 +340,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         try {
-
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, locationListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, locationListener);
-
         }
         catch (Exception e){
-
             e.printStackTrace();
         }
 
@@ -471,6 +485,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             super.onCharacteristicChanged(gatt, characteristic);
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_TEMPERATURE_DATA)) {
                 final double ambient = Utilities.extractAmbientTemperature(characteristic);
+                logBook.setTemperature(ambient);
 
                 // Upload to Firebase Backend
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -488,6 +503,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 final double humidity = Utilities.extractHumidity(characteristic);
                 final String currentTime = java.text.DateFormat.getDateTimeInstance().format(new Date());
 
+                logBook.setHumidity(humidity);
+                logBook.setTime(currentTime);
 
                 // Upload to Firebase Backend
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -511,6 +528,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 enableHumidityFetch = true;
                 gatt.readCharacteristic(gatt.getService(UUID_HUMIDITY_SERVICE).getCharacteristic(UUID_CHARACTERISTIC_HUMIDITY_DATA));
             }
+
+//            if(logBook.getTime() != "" && logBook.getHumidity() != 0 && logBook.getTemperature() != 0  && logBook.getIdDevice() != "" && logBook.getLatitude() != "" &&logBook.getLongitude() != ""){
+//                FirebaseDatabase database = FirebaseDatabase.getInstance();
+//                DatabaseReference myRef = database.getReference("Log");
+//            }
         }
 
         @Override

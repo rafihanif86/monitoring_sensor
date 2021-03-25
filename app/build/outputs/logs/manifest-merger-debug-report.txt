@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-42:12
-INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-42:12
-INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-42:12
-INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-42:12
+ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-43:12
 MERGED from [com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:17:1-38:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.0-beta4] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\719fb38fa22246fd46de14c12c898d2b\constraintlayout-2.0.0-beta4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat:1.1.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\8328721dc0174e9b72eef9b2ab92cc7f\appcompat-1.1.0\AndroidManifest.xml:17:1-24:12
@@ -36,20 +36,20 @@ MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Adnin\.gradle\ca
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\053b03371a3d309d3b702ce33575a36b\lifecycle-livedata-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\b3abdc7f518392dc2fd84791f07facc6\lifecycle-livedata-core-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\47153c853056b190cc4263926f6effd9\core-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
-INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-42:12
-INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-42:12
-INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-42:12
+INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-43:12
 	package
 		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:3:5-56
 		INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml
 		INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml
-		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-42:12
+		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-43:12
 		INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml
 	android:versionCode
 		INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml
-		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-42:12
+		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:1-43:12
 		INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:2:11-69
@@ -143,6 +143,10 @@ ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManife
 		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:33:13-52
 	android:name
 		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:32:13-58
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:40:5-74
+	android:name
+		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:40:22-72
 uses-sdk
 INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml
