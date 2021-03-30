@@ -143,10 +143,6 @@ ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManife
 		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:33:13-52
 	android:name
 		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:32:13-58
-uses-permission#android.permission.READ_PHONE_STATE
-ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:40:5-74
-	android:name
-		ADDED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:40:22-72
 uses-sdk
 INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml

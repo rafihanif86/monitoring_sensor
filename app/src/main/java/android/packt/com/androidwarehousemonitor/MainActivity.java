@@ -37,7 +37,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.content.ContextCompat;
 
-import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //initialize variable
     Button btLocation;
-    TextView textView5, textView6, textView7, textView8, textView9;
+    TextView textView5,textView6,textView7,textView8,textView9;
     FusedLocationProviderClient fusedLocationProviderClient;
 
     //maps config
@@ -133,10 +132,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private double longitudeNow;
     private String markerTittleNow;
 
-    private EditText editTextLatitude;
-    private EditText editTextLongitude;
+    LogBook logBook = new LogBook();
 
-    LogBook logBook;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,67 +148,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         textView8 = findViewById(R.id.text_view8);
         textView9 = findViewById(R.id.text_view9);
 
-        // create id device
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        logBook.setIdDevice(telephonyManager.getDeviceId());
 
-        //program baru Maps
+        //program baru map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PackageManager.PERMISSION_GRANTED);
-
-
-        databaseReference=FirebaseDatabase.getInstance().getReference("Location");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                try {
-                    String databaseLatitudeString = dataSnapshot.child("latitude").getValue().toString().substring(1, dataSnapshot.child("latitude").getValue().toString().length()-1);
-                    String databaseLongitudeString = dataSnapshot.child("Longitude").getValue().toString().substring(1, dataSnapshot.child("Longitude").getValue().toString().length()-1);
-
-//                    fungsi regex
-
-                    String[] stringLat = databaseLatitudeString.split(",");
-                    Arrays.sort(stringLat);
-                    String latitude = stringLat[stringLat.length-1].split("=")[1];
-
-                    String[] stringLong = databaseLongitudeString.split(",");
-                    Arrays.sort(stringLong);
-                    String longitude = stringLong[stringLong.length-1].split("=")[1];
-
-//                    atur picker
-
-                    LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
-
-                    mMap.addMarker(new MarkerOptions().position(latLng).title(latitude + " , " + longitude));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
 
     //batas program baru
 
@@ -224,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                     //when permission granted
                     getLocation();
+
                 }else{
                     //when permission denied
                     ActivityCompat.requestPermissions(MainActivity.this,
@@ -231,6 +175,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
+
+        handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(logBook.getTemperature() != 0 && logBook.getHumidity() != 0 && logBook.getLongitude() != 0 && logBook.getLatitude() != 0) {
+                    final String currentTime = java.text.DateFormat.getDateTimeInstance().format(new Date());
+                    logBook.setTime(currentTime);
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference myRef = database.getReference("Log");
+                    myRef.push().setValue(logBook);
+
+                    // delay setiap 60 detik
+                    handler.postDelayed(this, 60000);
+                }
+            }
+
+            // Delay awal
+        }, 1000);
     }
 
     @SuppressLint("MissingPermission")
@@ -245,27 +208,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Geocoder geocoder = new Geocoder(MainActivity.this,
                                 Locale.getDefault());
 
+
                         //initialize address
                         List<Address> addresses = geocoder.getFromLocation(
                                 location.getLatitude(), location.getLongitude(), 1
                         );
 
-                        latitudeNow = addresses.get(0).getLatitude();
-                        longitudeNow = addresses.get(0).getLongitude();
                         markerTittleNow = addresses.get(0).getLocality() + ", " +  addresses.get(0).getCountryName();
 
-                        logBook.setLatitude(latitudeNow);
-                        logBook.setLongitude(longitudeNow);
+                        logBook.setLongitude(addresses.get(0).getLatitude());
+                        logBook.setLatitude(addresses.get(0).getLongitude());
 
                         //set latitude on text view
                         textView5.setText(Html.fromHtml(
                                 "<font color='#6200EE'><b>Latitude :</b><br></font>"
-                                        + latitudeNow
+                                        + logBook.getLatitude()
                         ));
                         //set longitude on text view
                         textView6.setText(Html.fromHtml(
                                 "<font color='#6200EE'><b>Longitude :</b><br></font>"
-                                        + longitudeNow
+                                        + logBook.getLongitude()
                         ));
                         //set country name
                         textView7.setText(Html.fromHtml(
@@ -281,8 +243,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         + addresses.get(0).getAddressLine(0)
                         ));
 
-//                        mengubah lokasi marker
-                        LatLng now = new LatLng(latitudeNow, longitudeNow);
+                        LatLng now = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
                         mMap.addMarker(new MarkerOptions().position(now).title(markerTittleNow));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(now));
 
@@ -294,7 +255,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    // override marker position
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -303,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        LatLng now = new LatLng(latitudeNow, longitudeNow);
 //        mMap.addMarker(new MarkerOptions().position(now).title(markerTittleNow));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(now));
+
 
         locationListener = new LocationListener() {
             @Override
@@ -488,9 +451,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 logBook.setTemperature(ambient);
 
                 // Upload to Firebase Backend
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("Temperature");
-                myRef.push().setValue(ambient);
+//                FirebaseDatabase database = FirebaseDatabase.getInstance();
+//                DatabaseReference myRef = database.getReference("Temperature");
+//                myRef.push().setValue(ambient);
+
 
                 //Update the UI
                 runOnUiThread(new Runnable() {
@@ -499,19 +463,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         ((TextView)findViewById(R.id.textView)).setText("Temperature: "+ambient+"\u00b0"+"C");
                     }
                 });
-            }else if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_HUMIDITY_DATA)) {
+            }
+            if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_HUMIDITY_DATA)) {
                 final double humidity = Utilities.extractHumidity(characteristic);
-                final String currentTime = java.text.DateFormat.getDateTimeInstance().format(new Date());
-
                 logBook.setHumidity(humidity);
-                logBook.setTime(currentTime);
 
                 // Upload to Firebase Backend
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("Humidity");
-                DatabaseReference myRef2 = database.getReference("Waktu");
-                myRef.push().setValue(humidity);
-                myRef2.push().setValue(currentTime);
+//                FirebaseDatabase database = FirebaseDatabase.getInstance();
+//                DatabaseReference myRef = database.getReference("Humidity");
+//                DatabaseReference myRef2 = database.getReference("Waktu");
+//                myRef.push().setValue(humidity);
+//                myRef2.push().setValue(currentTime);
                 //TimeStamp.setValue(ServerValue.TIMESTAMP);
 
                 runOnUiThread(new Runnable() {
@@ -519,7 +481,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void run() {
                         ((TextView)findViewById(R.id.textView2)).setText(String.format("Humidity: "+"%.0f%%", humidity));
-                        ((TextView)findViewById(R.id.textView3)).setText(currentTime);
                     }
                 });
             }
@@ -529,10 +490,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 gatt.readCharacteristic(gatt.getService(UUID_HUMIDITY_SERVICE).getCharacteristic(UUID_CHARACTERISTIC_HUMIDITY_DATA));
             }
 
-//            if(logBook.getTime() != "" && logBook.getHumidity() != 0 && logBook.getTemperature() != 0  && logBook.getIdDevice() != "" && logBook.getLatitude() != "" &&logBook.getLongitude() != ""){
-//                FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                DatabaseReference myRef = database.getReference("Log");
-//            }
+            final String currentTime = java.text.DateFormat.getDateTimeInstance().format(new Date());
+            logBook.setTime(currentTime);
+            runOnUiThread(new Runnable() {
+                @SuppressLint("DefaultLocale")
+                @Override
+                public void run() {
+                    ((TextView)findViewById(R.id.textView3)).setText(currentTime);
+                }
+            });
         }
 
         @Override

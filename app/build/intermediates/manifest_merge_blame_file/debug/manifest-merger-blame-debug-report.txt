@@ -2,149 +2,145 @@
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="android.packt.com.androidwarehousemonitor"
 4    android:versionCode="1"
-5    android:versionName="1.0" >
-6
-7    <uses-sdk
-8        android:minSdkVersion="23"
+5    android:versionName="1.0" > <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE"/> -->
+6    <uses-sdk
+7        android:minSdkVersion="23"
+7-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml
+8        android:targetSdkVersion="29" />
 8-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml
-9        android:targetSdkVersion="29" />
-9-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml
-10
-11    <uses-feature
-11-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:5:5-7:34
-12        android:name="android.hardware.bluetooth_le"
-12-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:6:9-53
-13        android:required="true" />
-13-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:7:9-32
-14
-15    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-15-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:9:5-78
-15-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:9:22-76
-16    <uses-permission android:name="android.permission.INTERNET" />
-16-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:10:5-66
-16-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:10:22-64
-17    <uses-permission android:name="android.permission.BLUETOOTH" />
-17-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:11:5-67
-17-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:11:22-65
-18    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-18-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:12:5-73
-18-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:12:22-71
-19    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-19-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:13:5-80
-19-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:13:22-78
-20    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-20-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:9:5-78
-20-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:9:22-76
-21    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-21-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:13:5-80
-21-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:13:22-78
-22    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-22-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:40:5-74
-22-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:40:22-72
-23
-24    <!-- Include required permissions for Google Maps API to run. -->
-25    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-25-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:23:5-79
-25-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:23:22-76
-26
-27    <uses-feature
-27-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:26:5-28:35
-28        android:glEsVersion="0x00020000"
-28-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:27:9-41
-29        android:required="true" />
-29-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:28:9-32
-30
-31    <application
-31-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:15:5-36:19
-32        android:allowBackup="true"
-32-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:16:9-35
-33        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-33-->[androidx.core:core:1.1.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\836895203cb79edb49b61f99df5b5412\core-1.1.0\AndroidManifest.xml:24:18-86
-34        android:debuggable="true"
-35        android:extractNativeLibs="false"
-36        android:icon="@mipmap/ic_launcher"
-36-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:17:9-43
-37        android:label="@string/app_name"
-37-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:18:9-41
-38        android:roundIcon="@mipmap/ic_launcher_round"
-38-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:19:9-54
-39        android:supportsRtl="true"
-39-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:20:9-35
-40        android:testOnly="true"
-41        android:theme="@style/AppTheme" >
-41-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:21:9-40
-42        <activity android:name="android.packt.com.androidwarehousemonitor.MainActivity" >
-42-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:22:9-29:20
-42-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:23:13-41
-43            <intent-filter>
-43-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:24:13-28:29
-44                <action android:name="android.intent.action.MAIN" />
-44-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:25:17-69
-44-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:25:25-66
-45
-46                <category android:name="android.intent.category.LAUNCHER" />
-46-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:27:17-77
-46-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:27:27-74
-47            </intent-filter>
-48        </activity>
-49
-50        <meta-data
-50-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:31:9-33:55
-51            android:name="com.google.android.geo.API_KEY"
-51-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:32:13-58
-52            android:value="@string/google_maps_key" />
-52-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:33:13-52
-53
-54        <!-- Needs to be explicitly declared on P+ -->
-55        <uses-library
-55-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
-56            android:name="org.apache.http.legacy"
-56-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
-57            android:required="false" />
-57-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
-58
-59        <service
-59-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:29:9-35:19
-60            android:name="com.google.firebase.components.ComponentDiscoveryService"
-60-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:30:13-84
-61            android:directBootAware="true"
-61-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
-62            android:exported="false" >
-62-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:31:13-37
-63            <meta-data
-63-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:32:13-34:85
-64                android:name="com.google.firebase.components:com.google.firebase.database.DatabaseRegistrar"
-64-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:33:17-109
-65                android:value="com.google.firebase.components.ComponentRegistrar" />
-65-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:34:17-82
-66        </service>
-67
-68        <activity
-68-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\72fe7bbf8b1c14f1971af403fa755e9f\jetified-play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
-69            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-69-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\72fe7bbf8b1c14f1971af403fa755e9f\jetified-play-services-base-17.0.0\AndroidManifest.xml:24:13-79
-70            android:exported="false"
-70-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\72fe7bbf8b1c14f1971af403fa755e9f\jetified-play-services-base-17.0.0\AndroidManifest.xml:25:13-37
-71            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-71-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\72fe7bbf8b1c14f1971af403fa755e9f\jetified-play-services-base-17.0.0\AndroidManifest.xml:26:13-72
-72
-73        <provider
-73-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
-74            android:name="com.google.firebase.provider.FirebaseInitProvider"
-74-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
-75            android:authorities="android.packt.com.androidwarehousemonitor.firebaseinitprovider"
-75-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
-76            android:exported="false"
-76-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
-77            android:initOrder="100" />
-77-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
-78
-79        <meta-data
-79-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\a0220e926a485afac34731f9baf91ae5\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
-80            android:name="com.google.android.gms.version"
-80-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\a0220e926a485afac34731f9baf91ae5\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
-81            android:value="@integer/google_play_services_version" />
-81-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\a0220e926a485afac34731f9baf91ae5\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
-82    </application>
-83
-84</manifest>
+9
+10    <uses-feature
+10-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:5:5-7:34
+11        android:name="android.hardware.bluetooth_le"
+11-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:6:9-53
+12        android:required="true" />
+12-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:7:9-32
+13
+14    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+14-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:9:5-78
+14-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:9:22-76
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:10:5-66
+15-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:10:22-64
+16    <uses-permission android:name="android.permission.BLUETOOTH" />
+16-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:11:5-67
+16-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:11:22-65
+17    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+17-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:12:5-73
+17-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:12:22-71
+18    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+18-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:13:5-80
+18-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:13:22-78
+19    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+19-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:9:5-78
+19-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:9:22-76
+20    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+20-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:13:5-80
+20-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:13:22-78
+21
+22    <!-- Include required permissions for Google Maps API to run. -->
+23    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+23-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:23:5-79
+23-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:23:22-76
+24
+25    <uses-feature
+25-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:26:5-28:35
+26        android:glEsVersion="0x00020000"
+26-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:27:9-41
+27        android:required="true" />
+27-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:28:9-32
+28
+29    <application
+29-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:15:5-36:19
+30        android:allowBackup="true"
+30-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:16:9-35
+31        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+31-->[androidx.core:core:1.1.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\836895203cb79edb49b61f99df5b5412\core-1.1.0\AndroidManifest.xml:24:18-86
+32        android:debuggable="true"
+33        android:extractNativeLibs="false"
+34        android:icon="@mipmap/ic_launcher"
+34-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:17:9-43
+35        android:label="@string/app_name"
+35-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:18:9-41
+36        android:roundIcon="@mipmap/ic_launcher_round"
+36-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:19:9-54
+37        android:supportsRtl="true"
+37-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:20:9-35
+38        android:testOnly="true"
+39        android:theme="@style/AppTheme" >
+39-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:21:9-40
+40        <activity android:name="android.packt.com.androidwarehousemonitor.MainActivity" >
+40-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:22:9-29:20
+40-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:23:13-41
+41            <intent-filter>
+41-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:24:13-28:29
+42                <action android:name="android.intent.action.MAIN" />
+42-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:25:17-69
+42-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:25:25-66
+43
+44                <category android:name="android.intent.category.LAUNCHER" />
+44-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:27:17-77
+44-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:27:27-74
+45            </intent-filter>
+46        </activity>
+47
+48        <meta-data
+48-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:31:9-33:55
+49            android:name="com.google.android.geo.API_KEY"
+49-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:32:13-58
+50            android:value="@string/google_maps_key" />
+50-->D:\android project\AndroidWarehouseMonitor\app\src\main\AndroidManifest.xml:33:13-52
+51
+52        <!-- Needs to be explicitly declared on P+ -->
+53        <uses-library
+53-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40
+54            android:name="org.apache.http.legacy"
+54-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:34:13-50
+55            android:required="false" />
+55-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\5ef8e64c0651f2c33189ccae2c75b60e\jetified-play-services-maps-17.0.0\AndroidManifest.xml:35:13-37
+56
+57        <service
+57-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:29:9-35:19
+58            android:name="com.google.firebase.components.ComponentDiscoveryService"
+58-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:30:13-84
+59            android:directBootAware="true"
+59-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
+60            android:exported="false" >
+60-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:31:13-37
+61            <meta-data
+61-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:32:13-34:85
+62                android:name="com.google.firebase.components:com.google.firebase.database.DatabaseRegistrar"
+62-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:33:17-109
+63                android:value="com.google.firebase.components.ComponentRegistrar" />
+63-->[com.google.firebase:firebase-database:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\3d978b545e094c378b3a58628d7cea97\jetified-firebase-database-19.3.0\AndroidManifest.xml:34:17-82
+64        </service>
+65
+66        <activity
+66-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\72fe7bbf8b1c14f1971af403fa755e9f\jetified-play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+67            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+67-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\72fe7bbf8b1c14f1971af403fa755e9f\jetified-play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+68            android:exported="false"
+68-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\72fe7bbf8b1c14f1971af403fa755e9f\jetified-play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+69            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+69-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\72fe7bbf8b1c14f1971af403fa755e9f\jetified-play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+70
+71        <provider
+71-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
+72            android:name="com.google.firebase.provider.FirebaseInitProvider"
+72-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
+73            android:authorities="android.packt.com.androidwarehousemonitor.firebaseinitprovider"
+73-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
+74            android:exported="false"
+74-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
+75            android:initOrder="100" />
+75-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\08a3e35e6aa6c08c79b67140fab42dca\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
+76
+77        <meta-data
+77-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\a0220e926a485afac34731f9baf91ae5\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+78            android:name="com.google.android.gms.version"
+78-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\a0220e926a485afac34731f9baf91ae5\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+79            android:value="@integer/google_play_services_version" />
+79-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Adnin\.gradle\caches\transforms-2\files-2.1\a0220e926a485afac34731f9baf91ae5\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+80    </application>
+81
+82</manifest>
