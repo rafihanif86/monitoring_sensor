@@ -2,6 +2,8 @@ package android.packt.com.androidwarehousemonitor;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -66,6 +68,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private double longitudeNow;
     private String markerTittleNow;
 
-    LogBook logBook = new LogBook();
+    static LogBook logBook = new LogBook();
 
     Handler handler;
 
@@ -141,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // add text field
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btLocation = findViewById(R.id.bt_location);
         textView5 = findViewById(R.id.text_view5);
         textView6 = findViewById(R.id.text_view6);
         textView7 = findViewById(R.id.text_view7);
@@ -159,42 +161,58 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //initialize fusedLocationProviderClient
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        btLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //check permission
-                if (ActivityCompat.checkSelfPermission(MainActivity.this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                    //when permission granted
-                    getLocation();
+        if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            //when permission granted
+            getLocation();
 
-                }else{
-                    //when permission denied
-                    ActivityCompat.requestPermissions(MainActivity.this,
-                          new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
-                }
+        }else{
+            //when permission denied
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+        }
+
+//        btLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //check permission
+////                if (ActivityCompat.checkSelfPermission(MainActivity.this,
+////                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+////                    //when permission granted
+////                    getLocation();
+////
+////                }else{
+////                    //when permission denied
+////                    ActivityCompat.requestPermissions(MainActivity.this,
+////                          new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+////                }
+//                startService(new Intent(getBaseContext(), MyService.class));
+//            }
+//        });
+
+        logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
+        runOnUiThread(new Runnable() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void run() {
+                ((TextView)findViewById(R.id.textView3)).setText(logBook.getTime());
             }
         });
 
-        handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(logBook.getTemperature() != 0 && logBook.getHumidity() != 0 && logBook.getLongitude() != 0 && logBook.getLatitude() != 0) {
-                    final String currentTime = java.text.DateFormat.getDateTimeInstance().format(new Date());
-                    logBook.setTime(currentTime);
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference("Log");
-                    myRef.push().setValue(logBook);
 
-                    // delay setiap 60 detik
-                    handler.postDelayed(this, 60000);
-                }
-            }
 
-            // Delay awal
-        }, 1000);
     }
+
+    public void startService(View view) {
+        Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
+        serviceIntent.putExtra("logBook", logBook);
+        startService(serviceIntent);
+    }
+
+    public void stopService(View view) {
+        stopService(new Intent(getBaseContext(), MyService.class));
+    }
+
 
     @SuppressLint("MissingPermission")
     private void getLocation() {
@@ -219,6 +237,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         logBook.setLongitude(addresses.get(0).getLatitude());
                         logBook.setLatitude(addresses.get(0).getLongitude());
 
+                        LatLng now = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                        mMap.addMarker(new MarkerOptions().position(now).title(markerTittleNow));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(now));
+
                         //set latitude on text view
                         textView5.setText(Html.fromHtml(
                                 "<font color='#6200EE'><b>Latitude :</b><br></font>"
@@ -242,10 +264,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 "<font color='#6200EE'><b>Address :</b><br></font>"
                                         + addresses.get(0).getAddressLine(0)
                         ));
-
-                        LatLng now = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-                        mMap.addMarker(new MarkerOptions().position(now).title(markerTittleNow));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(now));
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -447,8 +465,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_TEMPERATURE_DATA)) {
-                final double ambient = Utilities.extractAmbientTemperature(characteristic);
-                logBook.setTemperature(ambient);
+                logBook.setTemperature(Utilities.extractAmbientTemperature(characteristic));
 
                 // Upload to Firebase Backend
 //                FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -460,13 +477,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView)findViewById(R.id.textView)).setText("Temperature: "+ambient+"\u00b0"+"C");
+                        ((TextView)findViewById(R.id.textView)).setText("Temperature: "+logBook.getTemperature()+"\u00b0"+"C");
                     }
                 });
             }
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_HUMIDITY_DATA)) {
-                final double humidity = Utilities.extractHumidity(characteristic);
-                logBook.setHumidity(humidity);
+                logBook.setHumidity(Utilities.extractHumidity(characteristic));
 
                 // Upload to Firebase Backend
 //                FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -480,7 +496,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @SuppressLint("DefaultLocale")
                     @Override
                     public void run() {
-                        ((TextView)findViewById(R.id.textView2)).setText(String.format("Humidity: "+"%.0f%%", humidity));
+                        ((TextView)findViewById(R.id.textView2)).setText(String.format("Humidity: "+"%.0f%%", logBook.getHumidity()));
                     }
                 });
             }
@@ -490,13 +506,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 gatt.readCharacteristic(gatt.getService(UUID_HUMIDITY_SERVICE).getCharacteristic(UUID_CHARACTERISTIC_HUMIDITY_DATA));
             }
 
-            final String currentTime = java.text.DateFormat.getDateTimeInstance().format(new Date());
-            logBook.setTime(currentTime);
+            logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
+
+            stopService(new Intent(getBaseContext(), MyService.class));
+
+            Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
+            serviceIntent.putExtra("logBook", logBook);
+            startService(serviceIntent);
+
             runOnUiThread(new Runnable() {
                 @SuppressLint("DefaultLocale")
                 @Override
                 public void run() {
-                    ((TextView)findViewById(R.id.textView3)).setText(currentTime);
+                    ((TextView)findViewById(R.id.textView3)).setText(logBook.getTime());
                 }
             });
         }

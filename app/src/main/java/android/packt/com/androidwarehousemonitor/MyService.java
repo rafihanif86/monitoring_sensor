@@ -31,8 +31,8 @@ public class MyService  extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        logBook =  (LogBook) intent.getSerializableExtra("logbook");
         Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+        logBook =  (LogBook) intent.getSerializableExtra("logBook");
         while (logBook.getLongitude() != 0 && logBook.getLatitude() >= 0) {
             logBook =  MainActivity.logBook;
 
@@ -48,7 +48,7 @@ public class MyService  extends Service {
 
         }
         Toast.makeText(this, "End of Start", Toast.LENGTH_LONG).show();
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override

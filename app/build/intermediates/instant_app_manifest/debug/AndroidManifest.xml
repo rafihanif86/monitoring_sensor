@@ -3,7 +3,8 @@
     package="android.packt.com.androidwarehousemonitor"
     android:targetSandboxVersion="2"
     android:versionCode="1"
-    android:versionName="1.0" > <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE"/> -->
+    android:versionName="1.0" >
+
     <uses-sdk
         android:minSdkVersion="23"
         android:targetSdkVersion="29" />
@@ -12,13 +13,13 @@
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Include required permissions for Google Maps API to run. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -48,8 +49,12 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key" /> <!-- <service android:name=".AndroidService" /> -->
 
+        <service
+            android:name="android.packt.com.androidwarehousemonitor.MyService"
+            android:enabled="true"
+            android:exported="false" />
         <!-- Needs to be explicitly declared on P+ -->
         <uses-library
             android:name="org.apache.http.legacy"

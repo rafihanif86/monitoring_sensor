@@ -11,10 +11,18 @@
     tools:context="android.packt.com.androidwarehousemonitor.MainActivity">
 
     <Button
-        android:id="@+id/bt_location"
+        android:id="@+id/btnStartService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Location" />
+        android:onClick="startService"
+        android:text="Start Service" />
+
+    <Button
+        android:id="@+id/btnStopService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="stopService"
+        android:text="Stop Service" />
 
     <LinearLayout
         android:layout_width="match_parent"

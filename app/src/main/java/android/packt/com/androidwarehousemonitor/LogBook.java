@@ -1,6 +1,8 @@
 package android.packt.com.androidwarehousemonitor;
 
-public class LogBook {
+import java.io.Serializable;
+
+public class LogBook implements Serializable {
     private String time;
     private double humidity;
     private double temperature;

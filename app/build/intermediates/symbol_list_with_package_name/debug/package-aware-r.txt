@@ -945,7 +945,8 @@ id beginning
 id blocking
 id bottom
 id bounce
-id bt_location
+id btnStartService
+id btnStopService
 id buttonPanel
 id center
 id center_vertical
