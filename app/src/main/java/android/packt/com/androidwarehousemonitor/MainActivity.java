@@ -211,6 +211,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void stopService(View view) {
         stopService(new Intent(getBaseContext(), MyService.class));
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference("Log");
+//        myRef.removeValue();
+//        Toast.makeText(this, "Telah di hapus", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -239,7 +243,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         LatLng now = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
                         mMap.addMarker(new MarkerOptions().position(now).title(markerTittleNow));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(now));
+                        float zoomLevel = 16.0f; //This goes up to 21
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(now, zoomLevel));
 
                         //set latitude on text view
                         textView5.setText(Html.fromHtml(
@@ -464,14 +469,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
+            LogBook new_logbook = new LogBook();
+
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_TEMPERATURE_DATA)) {
-                logBook.setTemperature(Utilities.extractAmbientTemperature(characteristic));
-
-                // Upload to Firebase Backend
-//                FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                DatabaseReference myRef = database.getReference("Temperature");
-//                myRef.push().setValue(ambient);
-
+                new_logbook.setTemperature(Utilities.extractAmbientTemperature(characteristic));
 
                 //Update the UI
                 runOnUiThread(new Runnable() {
@@ -482,15 +483,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 });
             }
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_HUMIDITY_DATA)) {
-                logBook.setHumidity(Utilities.extractHumidity(characteristic));
-
-                // Upload to Firebase Backend
-//                FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                DatabaseReference myRef = database.getReference("Humidity");
-//                DatabaseReference myRef2 = database.getReference("Waktu");
-//                myRef.push().setValue(humidity);
-//                myRef2.push().setValue(currentTime);
-                //TimeStamp.setValue(ServerValue.TIMESTAMP);
+                new_logbook.setHumidity(Utilities.extractHumidity(characteristic));
 
                 runOnUiThread(new Runnable() {
                     @SuppressLint("DefaultLocale")
@@ -508,11 +501,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
 
-            stopService(new Intent(getBaseContext(), MyService.class));
+            if(new_logbook.getTemperature() != logBook.getTemperature() || new_logbook.getHumidity() != logBook.getHumidity()) {
+                logBook.setTemperature(new_logbook.getTemperature());
+                logBook.setHumidity(new_logbook.getHumidity());
 
-            Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
-            serviceIntent.putExtra("logBook", logBook);
-            startService(serviceIntent);
+                stopService(new Intent(getBaseContext(), MyService.class));
+
+                Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
+                serviceIntent.putExtra("logBook", logBook);
+                startService(serviceIntent);
+            }
 
             runOnUiThread(new Runnable() {
                 @SuppressLint("DefaultLocale")

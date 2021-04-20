@@ -40,7 +40,7 @@ public class MyService  extends Service {
             public void run() {
 
 //        while (logBook.getLongitude() != 0 && logBook.getLatitude() >= 0) {
-            logBook =  MainActivity.logBook;
+//            logBook =  MainActivity.logBook;
 
             logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
 
