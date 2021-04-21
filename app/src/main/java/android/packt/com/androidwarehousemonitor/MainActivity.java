@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean enableHumidityFetch = false;
 
     //initialize variable
-    Button btLocation;
+    Button btLocation, btnStartService, btnStopService;
     TextView textView5,textView6,textView7,textView8,textView9;
     FusedLocationProviderClient fusedLocationProviderClient;
 
@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     static LogBook logBook = new LogBook();
 
     Handler handler;
+    boolean serviceStatus = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         textView7 = findViewById(R.id.text_view7);
         textView8 = findViewById(R.id.text_view8);
         textView9 = findViewById(R.id.text_view9);
+
+        btnStartService = findViewById(R.id.btnStartService);
+        btnStopService = findViewById(R.id.btnStopService);
 
 
         //program baru map fragment
@@ -199,18 +203,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-
-
+        btnStartService.setEnabled(true);
+        btnStopService.setEnabled(false);
     }
 
     public void startService(View view) {
         Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
         serviceIntent.putExtra("logBook", logBook);
         startService(serviceIntent);
+
+        btnStartService.setEnabled(false);
+        btnStopService.setEnabled(true);
+        serviceStatus = true;
     }
 
     public void stopService(View view) {
         stopService(new Intent(getBaseContext(), MyService.class));
+
+        btnStartService.setEnabled(true);
+        btnStopService.setEnabled(false);
+        serviceStatus = false;
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference("Log");
 //        myRef.removeValue();
@@ -510,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     logBook.setHumidity(new_logbook.getHumidity());
                 }
 
-                if(logBook.getHumidity() != 0 && logBook.getTemperature() != 0) {
+                if(logBook.getHumidity() != 0 && logBook.getTemperature() != 0 && serviceStatus == true) {
                     stopService(new Intent(getBaseContext(), MyService.class));
 
                     Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
