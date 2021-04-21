@@ -18,6 +18,7 @@ import java.util.TimerTask;
 
 public class MyService  extends Service {
     LogBook  logBook;
+    Timer loopingTimer;
 
     @Override
     public void onCreate() {
@@ -35,33 +36,26 @@ public class MyService  extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
         logBook =  (LogBook) intent.getSerializableExtra("logBook");
-        new Timer().scheduleAtFixedRate(new TimerTask() {
+
+        loopingTimer = new Timer();
+        loopingTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
 
-//        while (logBook.getLongitude() != 0 && logBook.getLatitude() >= 0) {
-//            logBook =  MainActivity.logBook;
-
-            logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
-
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("Log");
-            myRef.push().setValue(logBook);
-
-//            Toast.makeText(this, "Telah di upload", Toast.LENGTH_SHORT).show();
-//
-//            SystemClock.sleep(60000); // 30 seconds
-//
-//        }
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("Log");
+                myRef.push().setValue(logBook);
             }
+        }, 0, 60000);
 
-        }, 60000, 60000);
         Toast.makeText(this, "End of Start", Toast.LENGTH_LONG).show();
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        loopingTimer.cancel();
         super.onDestroy();
         Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
     }

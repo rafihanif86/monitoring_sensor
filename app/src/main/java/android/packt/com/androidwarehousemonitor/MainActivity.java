@@ -502,14 +502,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
 
             if(new_logbook.getTemperature() != logBook.getTemperature() || new_logbook.getHumidity() != logBook.getHumidity()) {
-                logBook.setTemperature(new_logbook.getTemperature());
-                logBook.setHumidity(new_logbook.getHumidity());
+                if(new_logbook.getTemperature() != logBook.getTemperature()){
+                    logBook.setTemperature(new_logbook.getTemperature());
+                }
 
-                stopService(new Intent(getBaseContext(), MyService.class));
+                if(new_logbook.getHumidity() != logBook.getHumidity()){
+                    logBook.setHumidity(new_logbook.getHumidity());
+                }
 
-                Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
-                serviceIntent.putExtra("logBook", logBook);
-                startService(serviceIntent);
+                if(logBook.getHumidity() != 0 && logBook.getTemperature() != 0) {
+                    stopService(new Intent(getBaseContext(), MyService.class));
+
+                    Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
+                    serviceIntent.putExtra("logBook", logBook);
+                    startService(serviceIntent);
+                }
             }
 
             runOnUiThread(new Runnable() {
