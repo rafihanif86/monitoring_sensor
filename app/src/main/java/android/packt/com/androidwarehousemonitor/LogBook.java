@@ -3,15 +3,12 @@ package android.packt.com.androidwarehousemonitor;
 import java.io.Serializable;
 
 public class LogBook implements Serializable {
-    private String time;
-    private double humidity;
-    private double temperature;
-    private double latitude;
-    private double longitude;
-//    private String idDevice;
+    private String time, user;
+    private double humidity, temperature, latitude, longitude;
 
-    public LogBook (String time, double humidity, double temperature, double latitude, double longitude){
+    public LogBook (String user, String time, double humidity, double temperature, double latitude, double longitude){
         this.time = time;
+        this.user = user;
         this.humidity = humidity;
         this.temperature = temperature;
         this.latitude = latitude;
@@ -19,8 +16,15 @@ public class LogBook implements Serializable {
     }
 
     public LogBook (){
-
+        this.time = "";
+        this.user = "";
+        this.humidity = 0;
+        this.temperature = 0;
+        this.latitude = 0;
+        this.longitude = 0;
     }
+
+    public void setUser(String user) { this.user = user; }
 
     public void setHumidity(double humidity) {
         this.humidity = humidity;
@@ -42,9 +46,6 @@ public class LogBook implements Serializable {
         this.time = time;
     }
 
-//    public void setIdDevice(String idDevice) {
-//        this.idDevice = idDevice;
-//    }
 
     public String getTime() {
         return time;
@@ -66,7 +67,6 @@ public class LogBook implements Serializable {
         return temperature;
     }
 
-//    public String getIdDevice() {
-//        return idDevice;
-//    }
+    public String getUser() { return user; }
+
 }

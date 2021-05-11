@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Monitoring CC2650</string>
+    <string name="start_service">Start Service</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="stop_service">Stop Service</string>
+    <string name="temperature">Temperature:</string>
+    <string name="humidity">Humidity:</string>
+    <string name="time">Time:</string>
+    <string name="posisi_user">Posisi User</string>
+    <string name="logout">Logout</string>
 </resources>

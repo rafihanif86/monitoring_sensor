@@ -40,7 +40,7 @@ public class Login extends AppCompatActivity {
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = mEmail.getText().toString().trim();
+                final String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
 
                 if(TextUtils.isEmpty(email)){
@@ -65,7 +65,9 @@ public class Login extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(Login.this,"Login Successfully.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            Intent sendData = new Intent(getApplicationContext(), MainActivity.class);
+                            sendData.putExtra("email", mEmail.getText().toString().trim());
+                            startActivity(sendData);
                         }else{
                             Toast.makeText(Login.this,"Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);

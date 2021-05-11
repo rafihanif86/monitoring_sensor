@@ -21,24 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Adnin\\.gradle\\caches\\transforms-2\\files-2.1\\836895203cb79edb49b61f99df5b5412\\core-1.1.0\\res\\values-ne\\values-ne.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "48",
-                        "startColumns": "4",
-                        "startOffsets": "5795",
-                        "endColumns": "100",
-                        "endOffsets": "5891"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Adnin\\.gradle\\caches\\transforms-2\\files-2.1\\72fe7bbf8b1c14f1971af403fa755e9f\\jetified-play-services-base-17.0.0\\res\\values-ne\\values.xml",
+                    "source": "C:\\Users\\Adnin\\.gradle\\caches\\transforms-2\\files-2.1\\3e57383bd944d40a24035342cb4ab7c6\\jetified-play-services-base-17.1.0\\res\\values-ne\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -55,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Adnin\\.gradle\\caches\\transforms-2\\files-2.1\\a0220e926a485afac34731f9baf91ae5\\jetified-play-services-basement-17.0.0\\res\\values-ne\\values.xml",
+                    "source": "C:\\Users\\Adnin\\.gradle\\caches\\transforms-2\\files-2.1\\c61e11f458011f17c193b6cf95890ffb\\jetified-play-services-basement-17.1.0\\res\\values-ne\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -69,6 +52,23 @@
                         "startOffsets": "4092",
                         "endColumns": "222",
                         "endOffsets": "4310"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Adnin\\.gradle\\caches\\transforms-2\\files-2.1\\836895203cb79edb49b61f99df5b5412\\core-1.1.0\\res\\values-ne\\values-ne.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "48",
+                        "startColumns": "4",
+                        "startOffsets": "5795",
+                        "endColumns": "100",
+                        "endOffsets": "5891"
                     }
                 }
             ]

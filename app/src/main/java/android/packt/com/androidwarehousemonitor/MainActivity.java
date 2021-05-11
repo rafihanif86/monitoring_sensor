@@ -57,6 +57,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //initialize variable
     Button btLocation, btnStartService, btnStopService;
-    TextView textView5,textView6,textView7,textView8,textView9;
+    TextView textView5,textView6,textView7,textView8,textView9, mUser;
     FusedLocationProviderClient fusedLocationProviderClient;
 
     //maps config
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         textView7 = findViewById(R.id.text_view7);
         textView8 = findViewById(R.id.text_view8);
         textView9 = findViewById(R.id.text_view9);
+        mUser = findViewById(R.id.user);
 
         btnStartService = findViewById(R.id.btnStartService);
         btnStopService = findViewById(R.id.btnStopService);
@@ -176,24 +178,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
         }
 
-//        btLocation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //check permission
-////                if (ActivityCompat.checkSelfPermission(MainActivity.this,
-////                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-////                    //when permission granted
-////                    getLocation();
-////
-////                }else{
-////                    //when permission denied
-////                    ActivityCompat.requestPermissions(MainActivity.this,
-////                          new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
-////                }
-//                startService(new Intent(getBaseContext(), MyService.class));
-//            }
-//        });
-
         logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
         runOnUiThread(new Runnable() {
             @SuppressLint("DefaultLocale")
@@ -203,8 +187,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        btnStartService.setEnabled(true);
-        btnStopService.setEnabled(false);
+        btnStartService.setVisibility(View.VISIBLE);
+        btnStopService.setVisibility(View.GONE);
+
+        // menambahkan email untuk diupload
+        logBook.setUser(getIntent().getStringExtra("email"));
+        mUser.setText(Html.fromHtml(
+                "<font color='#6200EE'><b>Pengguna :</b><br></font>"
+                        + logBook.getUser()
+        ));
+    }
+
+    public void logout(View view){
+        FirebaseAuth.getInstance().signOut(); // logout
+        startActivity(new Intent(getApplicationContext(), Login.class));
+        finish();
     }
 
     public void startService(View view) {
@@ -212,17 +209,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         serviceIntent.putExtra("logBook", logBook);
         startService(serviceIntent);
 
-        btnStartService.setEnabled(false);
-        btnStopService.setEnabled(true);
+        btnStartService.setVisibility(View.GONE);
+        btnStopService.setVisibility(View.VISIBLE);
         serviceStatus = true;
     }
 
     public void stopService(View view) {
         stopService(new Intent(getBaseContext(), MyService.class));
 
-        btnStartService.setEnabled(true);
-        btnStopService.setEnabled(false);
+        btnStartService.setVisibility(View.VISIBLE);
+        btnStopService.setVisibility(View.GONE);
         serviceStatus = false;
+
+        // menghapus data di firebase
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference("Log");
 //        myRef.removeValue();
@@ -241,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     try {
                         Geocoder geocoder = new Geocoder(MainActivity.this,
                                 Locale.getDefault());
-
 
                         //initialize address
                         List<Address> addresses = geocoder.getFromLocation(
@@ -288,6 +286,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
+    }
+
+    public void toast(String msg){
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
 
@@ -481,27 +483,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
-            LogBook new_logbook = new LogBook();
-
+            double humidity = 0 ;
+            double temperature = 0;
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_TEMPERATURE_DATA)) {
-                new_logbook.setTemperature(Utilities.extractAmbientTemperature(characteristic));
+                temperature = Utilities.extractAmbientTemperature(characteristic);
 
                 //Update the UI
+                final double finalTemperature = temperature;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView)findViewById(R.id.textView)).setText("Temperature: "+logBook.getTemperature()+"\u00b0"+"C");
+                        ((TextView)findViewById(R.id.textView)).setText("Temperature: "+ finalTemperature +"\u00b0"+"C");
                     }
                 });
             }
-            if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_HUMIDITY_DATA)) {
-                new_logbook.setHumidity(Utilities.extractHumidity(characteristic));
 
+            if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_HUMIDITY_DATA)) {
+                humidity = Utilities.extractHumidity(characteristic);
+
+                final double finalHumidity = humidity;
                 runOnUiThread(new Runnable() {
                     @SuppressLint("DefaultLocale")
                     @Override
                     public void run() {
-                        ((TextView)findViewById(R.id.textView2)).setText(String.format("Humidity: "+"%.0f%%", logBook.getHumidity()));
+                        ((TextView)findViewById(R.id.textView2)).setText(String.format("Humidity: "+"%.0f%%", finalHumidity));
                     }
                 });
             }
@@ -513,14 +518,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
 
-            if(new_logbook.getTemperature() != logBook.getTemperature() || new_logbook.getHumidity() != logBook.getHumidity()) {
-                if(new_logbook.getTemperature() != logBook.getTemperature()){
-                    logBook.setTemperature(new_logbook.getTemperature());
+            if(temperature != logBook.getTemperature() || humidity != logBook.getHumidity()) {
+                if(temperature != logBook.getTemperature()){
+                    logBook.setTemperature(temperature);
                 }
 
-                if(new_logbook.getHumidity() != logBook.getHumidity()){
-                    logBook.setHumidity(new_logbook.getHumidity());
+                if(humidity != logBook.getHumidity()){
+                    logBook.setHumidity(humidity);
                 }
+
+                logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
+                runOnUiThread(new Runnable() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public void run() {
+                        ((TextView)findViewById(R.id.textView3)).setText(logBook.getTime());
+                    }
+                });
 
                 if(logBook.getHumidity() != 0 && logBook.getTemperature() != 0 && serviceStatus == true) {
                     stopService(new Intent(getBaseContext(), MyService.class));
@@ -528,6 +542,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
                     serviceIntent.putExtra("logBook", logBook);
                     startService(serviceIntent);
+                    toast("Service dimulai Ulang");
                 }
             }
 

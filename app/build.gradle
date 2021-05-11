@@ -25,6 +25,7 @@ dependencies {
     //compile fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.firebase:firebase-auth:20.0.4'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -37,8 +38,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
     //program baru
-    //implementation platform ('com.google.firebase:fiebase-bom:26.7.0')
-    //implementation 'com.google.firebase:firebase-analytics'
+    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation 'com.google.firebase:firebase-analytics'
     //batas program baru
 
     testImplementation 'junit:junit:4.13'

@@ -49,7 +49,7 @@ public class Register extends AppCompatActivity {
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = mEmail.getText().toString().trim();
+                final String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
                 if(TextUtils.isEmpty(email)){
                     mEmail.setError("Email is Required.");
@@ -74,7 +74,9 @@ public class Register extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(Register.this,"User Created.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            Intent sendData = new Intent(getApplicationContext(), MainActivity.class);
+                            sendData.putExtra("email", mEmail.getText().toString().trim());
+                            startActivity(sendData);
 
                         }else{
                             Toast.makeText(Register.this,"Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
