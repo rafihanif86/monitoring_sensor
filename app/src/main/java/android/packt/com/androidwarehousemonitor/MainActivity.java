@@ -2,8 +2,6 @@ package android.packt.com.androidwarehousemonitor;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -13,82 +11,56 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
-
 import android.content.Context;
 import android.content.Intent;
-
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-//import android.support.v4.app.ActivityCompat;
-//import android.support.v4.content.ContextCompat;
-//import android.support.v7.app.AppCompatActivity;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.core.content.ContextCompat;
-
 import android.text.Html;
 import android.util.Log;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.server.converter.StringToIntConverter;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import static androidx.constraintlayout.motion.widget.Debug.getLocation;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.content.ContextCompat;
+//import android.support.v7.app.AppCompatActivity;
 
-
-//batas program baru
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
-
-
-    //@Override
-    //protected void onCreate(Bundle savedInstanceState){
-    //    super.onCreate(savedInstanceState);
-    //    setContentView(R.layout.activity_main);
-
+    BottomNavigationView bottomNavigationView;
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_LOCATION = 1;
@@ -141,93 +113,57 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Handler handler;
     boolean serviceStatus = false;
 
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navigation = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem item) {
+            Fragment f = null;
+            switch (item.getItemId()){
+                case R.id.log_menu:
+                    f = new FragmentLog();
+                    break;
+                case R.id.profile_menu:
+                    f = new FragmentProfile();
+                    break;
+                case R.id.home_menu:
+                    f = new FragmentHome();
+                    Bundle data = new Bundle();
+                    data.putString(FragmentHome.KEY_ACTIVITY, String.valueOf(logBook.getLatitude()));
+                    f.setArguments(data);
+                    break;
+            }
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment, f).commit();
+
+            return true;
+        }
+    };
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // add text field
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView5 = findViewById(R.id.text_view5);
-        textView6 = findViewById(R.id.text_view6);
-        textView7 = findViewById(R.id.text_view7);
-        textView8 = findViewById(R.id.text_view8);
-        textView9 = findViewById(R.id.text_view9);
-        mUser = findViewById(R.id.user);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_menu);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navigation);
 
-        btnStartService = findViewById(R.id.btnStartService);
-        btnStopService = findViewById(R.id.btnStopService);
+        Bundle data = new Bundle();
+        data.putString(FragmentHome.KEY_ACTIVITY, String.valueOf(logBook.getLatitude()));
+        FragmentHome fragmentHome = new FragmentHome();
+        fragmentHome.setArguments(data);
+        textView5 = fragmentHome.text_latitude;
+        textView6 = fragmentHome.text_longitude;
+        textView7 = fragmentHome.text_negara;
+        textView8 = fragmentHome.text_kecamatan;
+        textView9 = fragmentHome.text_alamat;
+        mUser = fragmentHome.mUser;
+
+        btnStartService = fragmentHome.btnStartService;
+        btnStopService = fragmentHome.btnStopService;
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment, fragmentHome).commit();
 
 
-        //program baru map fragment
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PackageManager.PERMISSION_GRANTED);
-
-    //batas program baru
-
-        //initialize fusedLocationProviderClient
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            //when permission granted
-            getLocation();
-
-        }else{
-            //when permission denied
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
-        }
-
-        logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
-        runOnUiThread(new Runnable() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void run() {
-                ((TextView)findViewById(R.id.textView3)).setText(logBook.getTime());
-            }
-        });
-
-        btnStartService.setVisibility(View.VISIBLE);
-        btnStopService.setVisibility(View.GONE);
-
-        // menambahkan email untuk diupload
-        logBook.setUser(getIntent().getStringExtra("email"));
-        mUser.setText(Html.fromHtml(
-                "<font color='#6200EE'><b>Pengguna :</b><br></font>"
-                        + logBook.getUser()
-        ));
     }
-
-    public void logout(View view){
-        FirebaseAuth.getInstance().signOut(); // logout
-        startActivity(new Intent(getApplicationContext(), Login.class));
-        finish();
-    }
-
-    public void startService(View view) {
-        Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
-        serviceIntent.putExtra("logBook", logBook);
-        startService(serviceIntent);
-
-        btnStartService.setVisibility(View.GONE);
-        btnStopService.setVisibility(View.VISIBLE);
-        serviceStatus = true;
-    }
-
-    public void stopService(View view) {
-        stopService(new Intent(getBaseContext(), MyService.class));
-
-        btnStartService.setVisibility(View.VISIBLE);
-        btnStopService.setVisibility(View.GONE);
-        serviceStatus = false;
-
-        // menghapus data di firebase
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("Log");
-//        myRef.removeValue();
-//        Toast.makeText(this, "Telah di hapus", Toast.LENGTH_SHORT).show();
-    }
-
 
     @SuppressLint("MissingPermission")
     private void getLocation() {

@@ -1,181 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context="android.packt.com.androidwarehousemonitor.MainActivity">
+    tools:context=".MainActivity"
+    android:background="#ffff">
 
-    <TextView
-        android:id="@+id/textView7"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/electrolize"
-        android:text="@string/dashboard"
-        android:textAlignment="center"
-        android:textColor="#03A9F4"
-        android:textSize="24sp" />
+        android:background="@color/colorPrimary"
+        android:id="@+id/bottom_navigation_menu"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_menu"
+        app:itemIconTint="#ffff"
+        app:itemTextColor="#ffff"/>
 
-    <Button
-        android:id="@+id/btnStartService"
+    <FrameLayout
+        android:id="@+id/container_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#4CAF50"
-        android:onClick="startService"
-        android:text="@string/start_service"
-        android:textColor="#FFFFFF"
-        android:visibility="invisible" />
-
-    <Button
-        android:id="@+id/btnStopService"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#E91E63"
-        android:onClick="stopService"
-        android:text="@string/stop_service"
-        android:textColor="#FFFFFF"
-        android:visibility="invisible" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/temperature"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/humidity"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/time"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView2"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView4"
-            app:layout_constraintVertical_bias="0.0" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/text_view5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/text_view6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/text_view7"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/text_view8"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_above="@id/bottom_navigation_menu" />
 
 
-        <TextView
-            android:id="@+id/posisi_user"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/posisi_user"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="user" />
-
-    <TextView
-        android:id="@+id/text_view9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp" />
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="9"
-        tools:layout="@android:layout/simple_spinner_dropdown_item" />
-
-    <Button
-        android:id="@+id/logoutBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#E91E63"
-        android:text="@string/logout"
-        android:textColor="#FDFDFD"
-        android:textSize="18sp"
-        android:onClick="logout"/>
-
-</LinearLayout>
+</RelativeLayout>
