@@ -1,9 +1,5 @@
 package android.packt.com.androidwarehousemonitor;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +10,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -113,7 +112,7 @@ public class Register extends AppCompatActivity {
                             });
 
                             Intent sendData = new Intent(getApplicationContext(), MainActivity.class);
-//                            sendData.putExtra("userID", userID);
+                            sendData.putExtra("userID", userID);
                             startActivity(sendData);
                         }else{
                             Toast.makeText(Register.this,"Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

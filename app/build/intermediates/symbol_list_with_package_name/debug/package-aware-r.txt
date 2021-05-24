@@ -1817,7 +1817,6 @@ id beginning
 id bidirectional
 id blocking
 id bottom
-id bottom_navigation_menu
 id bounce
 id browser_actions_header_text
 id browser_actions_menu_item_icon
@@ -1851,7 +1850,6 @@ id clip_vertical
 id collapseActionView
 id confirm_button
 id container
-id container_fragment
 id content
 id contentPanel
 id coordinator
@@ -1918,7 +1916,6 @@ id header_title
 id hideable
 id home
 id homeAsUp
-id home_menu
 id honorRequest
 id hybrid
 id icon
@@ -1944,13 +1941,8 @@ id light
 id line1
 id line3
 id linear
-id linearLayout
-id linearLayout2
-id linearLayout3
-id linearLayout4
 id listMode
 id list_item
-id log_menu
 id loginBtn
 id logoutBtn
 id map
@@ -2036,7 +2028,6 @@ id pin
 id posisi_user
 id position
 id postLayout
-id profile_menu
 id progressBar
 id progressBar2
 id progress_circular
@@ -2135,16 +2126,14 @@ id textView4
 id textView5
 id textView6
 id textView7
-id textView8
-id textView9
-id text_alamat
 id text_input_end_icon
 id text_input_error_icon
 id text_input_start_icon
-id text_kecamatan
-id text_latitude
-id text_longitude
-id text_negara
+id text_view5
+id text_view6
+id text_view7
+id text_view8
+id text_view9
 id textinput_counter
 id textinput_error
 id textinput_helper_text
@@ -2263,9 +2252,6 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
-layout fragment_home
-layout fragment_log
-layout fragment_profile
 layout material_chip_input_combo
 layout material_clock_display
 layout material_clock_display_divider
@@ -2332,7 +2318,6 @@ layout text_view_with_line_height_from_layout
 layout text_view_with_line_height_from_style
 layout text_view_with_theme_line_height
 layout text_view_without_line_height
-menu bottom_menu
 mipmap ic_launcher
 mipmap ic_launcher_round
 plurals mtrl_badge_content_description
@@ -2471,6 +2456,7 @@ string status_bar_notification_info_overflow
 string stop_service
 string temperature
 string time
+string user
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light
 style AndroidThemeColorAccentYellow

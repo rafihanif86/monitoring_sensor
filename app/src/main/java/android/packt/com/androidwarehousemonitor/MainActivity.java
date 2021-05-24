@@ -26,27 +26,27 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
 import java.io.IOException;
@@ -59,8 +59,9 @@ import java.util.UUID;
 //import android.support.v4.content.ContextCompat;
 //import android.support.v7.app.AppCompatActivity;
 
+
+//batas program baru
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
-    BottomNavigationView bottomNavigationView;
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_LOCATION = 1;
@@ -113,57 +114,94 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Handler handler;
     boolean serviceStatus = false;
 
-
-    private BottomNavigationView.OnNavigationItemSelectedListener navigation = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(MenuItem item) {
-            Fragment f = null;
-            switch (item.getItemId()){
-                case R.id.log_menu:
-                    f = new FragmentLog();
-                    break;
-                case R.id.profile_menu:
-                    f = new FragmentProfile();
-                    break;
-                case R.id.home_menu:
-                    f = new FragmentHome();
-                    Bundle data = new Bundle();
-                    data.putString(FragmentHome.KEY_ACTIVITY, String.valueOf(logBook.getLatitude()));
-                    f.setArguments(data);
-                    break;
-            }
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment, f).commit();
-
-            return true;
-        }
-    };
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        // add text field
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bottomNavigationView = findViewById(R.id.bottom_navigation_menu);
-        bottomNavigationView.setOnNavigationItemSelectedListener(navigation);
+        textView5 = findViewById(R.id.text_view5);
+        textView6 = findViewById(R.id.text_view6);
+        textView7 = findViewById(R.id.text_view7);
+        textView8 = findViewById(R.id.text_view8);
+        textView9 = findViewById(R.id.text_view9);
+        mUser = findViewById(R.id.user);
 
-        Bundle data = new Bundle();
-        data.putString(FragmentHome.KEY_ACTIVITY, String.valueOf(logBook.getLatitude()));
-        FragmentHome fragmentHome = new FragmentHome();
-        fragmentHome.setArguments(data);
-        textView5 = fragmentHome.text_latitude;
-        textView6 = fragmentHome.text_longitude;
-        textView7 = fragmentHome.text_negara;
-        textView8 = fragmentHome.text_kecamatan;
-        textView9 = fragmentHome.text_alamat;
-        mUser = fragmentHome.mUser;
-
-        btnStartService = fragmentHome.btnStartService;
-        btnStopService = fragmentHome.btnStopService;
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment, fragmentHome).commit();
+        btnStartService = findViewById(R.id.btnStartService);
+        btnStopService = findViewById(R.id.btnStopService);
 
 
+        //program baru map fragment
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PackageManager.PERMISSION_GRANTED);
+
+        //batas program baru
+
+        //initialize fusedLocationProviderClient
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            //when permission granted
+            getLocation();
+
+        }else{
+            //when permission denied
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+        }
+
+        logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
+        runOnUiThread(new Runnable() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void run() {
+                ((TextView)findViewById(R.id.textView3)).setText(logBook.getTime());
+            }
+        });
+
+        btnStartService.setVisibility(View.VISIBLE);
+        btnStopService.setVisibility(View.GONE);
+
+
+        // menambahkan email untuk diupload
+        logBook.setUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        mUser.setText(Html.fromHtml(
+                "<font color='#6200EE'><b>Pengguna :</b><br></font>"
+                        + logBook.getUser()
+        ));
     }
+
+    public void logout(View view){
+        FirebaseAuth.getInstance().signOut(); // logout
+        startActivity(new Intent(getApplicationContext(), Login.class));
+        finish();
+    }
+
+    public void startService(View view) {
+        Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
+        serviceIntent.putExtra("logBook", logBook);
+        startService(serviceIntent);
+
+        btnStartService.setVisibility(View.GONE);
+        btnStopService.setVisibility(View.VISIBLE);
+        serviceStatus = true;
+    }
+
+    public void stopService(View view) {
+        stopService(new Intent(getBaseContext(), MyService.class));
+
+        btnStartService.setVisibility(View.VISIBLE);
+        btnStopService.setVisibility(View.GONE);
+        serviceStatus = false;
+
+        // menghapus data di firebase
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference("Log");
+//        myRef.removeValue();
+//        Toast.makeText(this, "Telah di hapus", Toast.LENGTH_SHORT).show();
+    }
+
 
     @SuppressLint("MissingPermission")
     private void getLocation() {
