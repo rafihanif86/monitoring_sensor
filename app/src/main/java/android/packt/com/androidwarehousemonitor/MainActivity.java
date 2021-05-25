@@ -46,6 +46,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //initialize variable
 //    Button btLocation, btnStartService, btnStopService;
-    TextView textView5,textView6,textView7,textView8,textView9, mUser, btnStartService, btnStopService;
+    TextView textView5,textView6,textView7,textView8,textView9, mUser, btnStartService, btnStopService, resendCode;
     FusedLocationProviderClient fusedLocationProviderClient;
 
     //maps config
@@ -139,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         btnStartService = findViewById(R.id.btnStartService);
         btnStopService = findViewById(R.id.btnStopService);
+        resendCode = findViewById(R.id.text_verify);
 
 
         //program baru map fragment
@@ -193,6 +196,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if(fAuth == null){
             startActivity(new Intent(MainActivity.this, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        }
+
+        if(!fAuth.isEmailVerified()){
+            resendCode.setVisibility(View.VISIBLE);
+            resendCode.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    fAuth.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(view.getContext(), "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: Email not Send " + e.getMessage() );
+                        }
+                    });
+                }
+            });
         }
 
         logBook.setUser(FirebaseAuth.getInstance().getCurrentUser().getUid());

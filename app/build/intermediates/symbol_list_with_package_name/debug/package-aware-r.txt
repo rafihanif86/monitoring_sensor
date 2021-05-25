@@ -2137,6 +2137,7 @@ id textView7
 id text_input_end_icon
 id text_input_error_icon
 id text_input_start_icon
+id text_verify
 id text_view5
 id text_view6
 id text_view7
