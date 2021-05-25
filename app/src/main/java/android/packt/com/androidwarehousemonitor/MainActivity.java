@@ -27,11 +27,12 @@ import android.os.Message;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -47,7 +48,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.IOException;
 import java.util.Date;
@@ -91,8 +98,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean enableHumidityFetch = false;
 
     //initialize variable
-    Button btLocation, btnStartService, btnStopService;
-    TextView textView5,textView6,textView7,textView8,textView9, mUser;
+//    Button btLocation, btnStartService, btnStopService;
+    TextView textView5,textView6,textView7,textView8,textView9, mUser, btnStartService, btnStopService;
     FusedLocationProviderClient fusedLocationProviderClient;
 
     //maps config
@@ -114,6 +121,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Handler handler;
     boolean serviceStatus = false;
 
+    FirebaseUser fAuth;
+    FirebaseFirestore fStore;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // add text field
@@ -156,25 +167,72 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @SuppressLint("DefaultLocale")
             @Override
             public void run() {
-                ((TextView)findViewById(R.id.textView3)).setText(logBook.getTime());
+                ((TextView)findViewById(R.id.textView3)).setText(Html.fromHtml(
+                        "<font color='#6200EE'><b>Diperbarui pada :</b><br></font>"
+                                + logBook.getTime()));
+//                ((TextView)findViewById(R.id.textView2)).setText(Html.fromHtml(
+//                        "<font color='#6200EE'><b>Humidity :</b><br></font>"
+//                                + (int) logBook.getHumidity() + "%.0f%%"));
+                ((TextView)findViewById(R.id.textView2)).setText(Html.fromHtml(
+                        "<font color='#6200EE'><b>Humidity :</b><br></font>"
+                                + "%.0f%%", (int) logBook.getHumidity() ));
+                ((TextView)findViewById(R.id.textView)).setText(Html.fromHtml(
+                        "<font color='#6200EE'><b>Temperature :</b><br></font>"
+                                + logBook.getTemperature() +"\u00b0"+"C"));
             }
         });
+
 
         btnStartService.setVisibility(View.VISIBLE);
         btnStopService.setVisibility(View.GONE);
 
 
-        // menambahkan email untuk diupload
+        // memngambil data user
+        fAuth = FirebaseAuth.getInstance().getCurrentUser();
+        fStore = FirebaseFirestore.getInstance();
+
+        if(fAuth == null){
+            startActivity(new Intent(MainActivity.this, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        }
+
         logBook.setUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        mUser.setText(Html.fromHtml(
-                "<font color='#6200EE'><b>Pengguna :</b><br></font>"
-                        + logBook.getUser()
+
+        final DocumentReference documentReference = fStore.collection("users").document(logBook.getUser());
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+                mUser.setText(Html.fromHtml(
+                        "<font color='#6200EE'><b>Pengguna :</b></font><br> <b>"
+                                + documentSnapshot.getString("fName") + "</b> <br>"
+                                + documentSnapshot.getString("email") + "<br>"
+                                + documentSnapshot.getString("phone")
+                ));
+            }
+        });
+
+        //service button template.
+        btnStartService.setText(Html.fromHtml(
+                "<font color='#6200EE'><b>Service :</b><br></font>"
+                        + "<font color='#4CAF50'>Start Service >> </font>"
         ));
+
+        btnStopService.setText(Html.fromHtml(
+                "<font color='#6200EE'><b>Service :</b><br></font>"
+                        + "<font color='#E91E63'>Stop Service >> </font>"
+        ));
+
+
     }
 
     public void logout(View view){
         FirebaseAuth.getInstance().signOut(); // logout
-        startActivity(new Intent(getApplicationContext(), Login.class));
+        if(serviceStatus == true){
+            stopService(view);
+        }
+        Intent intent = new Intent(getApplicationContext(), Login.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
         finish();
     }
 
@@ -242,15 +300,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         ));
                         //set country name
                         textView7.setText(Html.fromHtml(
-                                "<font color='#6200EE'><b>Country Name :</b><br></font>"
+                                "<font color='#6200EE'><b>Negara :</b><br></font>"
                                         + addresses.get(0).getCountryName()
                         ));
                         //set locality
-                        textView8.setText(addresses.get(0).getLocality());
+                        textView8.setText(Html.fromHtml(
+                                "<font color='#6200EE'><b>Kecamatan :</b><br></font>"
+                                        + addresses.get(0).getLocality()));
                         //set address
                         Log.d("Lokasi", addresses.get(0).getLocality());
                         textView9.setText(Html.fromHtml(
-                                "<font color='#6200EE'><b>Address :</b><br></font>"
+                                "<font color='#6200EE'><b>Alamat :</b><br></font>"
                                         + addresses.get(0).getAddressLine(0)
                         ));
 
@@ -467,7 +527,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView)findViewById(R.id.textView)).setText("Temperature: "+ finalTemperature +"\u00b0"+"C");
+                        ((TextView)findViewById(R.id.textView)).setText(Html.fromHtml(
+                                "<font color='#6200EE'><b>Temperature :</b><br></font>"
+                                        + finalTemperature +"\u00b0"+"C"));
                     }
                 });
             }
@@ -477,10 +539,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 final double finalHumidity = humidity;
                 runOnUiThread(new Runnable() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @SuppressLint("DefaultLocale")
                     @Override
                     public void run() {
-                        ((TextView)findViewById(R.id.textView2)).setText(String.format("Humidity: "+"%.0f%%", finalHumidity));
+                        ((TextView)findViewById(R.id.textView2)).setText(String.format(String.valueOf(Html.fromHtml(
+                                "<font color='#6200EE'><b>Humidity :</b><br></font>"
+                                        + "%.0f%%", (int) finalHumidity))));
                     }
                 });
             }
@@ -506,7 +571,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @SuppressLint("DefaultLocale")
                     @Override
                     public void run() {
-                        ((TextView)findViewById(R.id.textView3)).setText(logBook.getTime());
+                        ((TextView)findViewById(R.id.textView3)).setText(Html.fromHtml(
+                                "<font color='#6200EE'><b>Diperbarui pada :</b><br></font>"
+                                        +logBook.getTime()));
                     }
                 });
 
@@ -524,7 +591,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @SuppressLint("DefaultLocale")
                 @Override
                 public void run() {
-                    ((TextView)findViewById(R.id.textView3)).setText(logBook.getTime());
+                    ((TextView)findViewById(R.id.textView3)).setText(Html.fromHtml(
+                            "<font color='#6200EE'><b>Diperbarui pada :</b><br></font>"
+                                    +logBook.getTime()));
                 }
             });
         }

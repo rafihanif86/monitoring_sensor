@@ -2,6 +2,7 @@ package android.packt.com.androidwarehousemonitor;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -29,6 +30,8 @@ public class Login extends AppCompatActivity {
     ProgressBar progressBar;
     String userID;
     FirebaseAuth fAuth;
+
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,10 @@ public class Login extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
+                sharedPreferences = getSharedPreferences("user_details", MODE_PRIVATE);
+                sharedPreferences.contains("email");
+                sharedPreferences.contains("userID");
+
                 fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -73,8 +80,8 @@ public class Login extends AppCompatActivity {
                             Toast.makeText(Login.this,"Login Successfully.", Toast.LENGTH_SHORT).show();
                             userID = fAuth.getCurrentUser().getUid();
 
-                            Intent sendData = new Intent(getApplicationContext(), MainActivity.class);
-                            sendData.putExtra("userID", userID);
+                            Intent sendData = new Intent(getApplicationContext(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                            sendData.putExtra("userID", userID);
                             startActivity(sendData);
                         }else{
                             Toast.makeText(Login.this,"Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

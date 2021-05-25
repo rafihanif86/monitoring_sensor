@@ -31,6 +31,7 @@
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
 
     <application
+        android:name="android.packt.com.androidwarehousemonitor.Home"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
@@ -41,14 +42,18 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/AppTheme" >
-        <activity android:name="android.packt.com.androidwarehousemonitor.Login" >
+        <activity
+            android:name="android.packt.com.androidwarehousemonitor.Login"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="android.packt.com.androidwarehousemonitor.Register" />
+        <activity
+            android:name="android.packt.com.androidwarehousemonitor.Register"
+            android:screenOrientation="portrait" />
         <activity android:name="android.packt.com.androidwarehousemonitor.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1655,6 +1655,7 @@ drawable btn_radio_off_mtrl
 drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
+drawable button_rounded
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
 drawable common_google_signin_btn_icon_dark_focused
@@ -1674,6 +1675,9 @@ drawable common_google_signin_btn_text_light
 drawable common_google_signin_btn_text_light_focused
 drawable common_google_signin_btn_text_light_normal
 drawable common_google_signin_btn_text_light_normal_background
+drawable custom_email_icon
+drawable custom_input
+drawable custom_lock_icon
 drawable design_bottom_navigation_item_background
 drawable design_fab_background
 drawable design_ic_visibility
@@ -1684,11 +1688,17 @@ drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable home_icon
 drawable ic_clock_black_24dp
+drawable ic_email
+drawable ic_email_focused
 drawable ic_keyboard_black_24dp
+drawable ic_lock
+drawable ic_lock_focused
 drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_person
+drawable ic_phone
 drawable log_icon
 drawable material_cursor_drawable
 drawable material_ic_calendar_black_24dp
@@ -2025,7 +2035,6 @@ id peekHeight
 id percent
 id phone
 id pin
-id posisi_user
 id position
 id postLayout
 id progressBar
@@ -2122,7 +2131,6 @@ id textTop
 id textView
 id textView2
 id textView3
-id textView4
 id textView5
 id textView6
 id textView7
