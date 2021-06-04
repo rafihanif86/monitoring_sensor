@@ -35,10 +35,6 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service
-            android:name=".MyService"
-            android:enabled="true"
-            android:exported="false" />
     </application>
 
     <uses-feature

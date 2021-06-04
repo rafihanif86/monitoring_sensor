@@ -52,6 +52,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -62,6 +63,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 //import android.support.v4.app.ActivityCompat;
@@ -118,13 +121,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private double longitudeNow;
     private String markerTittleNow;
 
-    static LogBook logBook = new LogBook();
+    LogBook logBook = new LogBook();
 
     Handler handler;
     boolean serviceStatus = false;
 
     FirebaseUser fAuth;
     FirebaseFirestore fStore;
+    Timer loopingService;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -173,22 +177,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 ((TextView)findViewById(R.id.textView3)).setText(Html.fromHtml(
                         "<font color='#6200EE'><b>Diperbarui pada :</b><br></font>"
                                 + logBook.getTime()));
-//                ((TextView)findViewById(R.id.textView2)).setText(Html.fromHtml(
-//                        "<font color='#6200EE'><b>Humidity :</b><br></font>"
-//                                + (int) logBook.getHumidity() + "%.0f%%"));
                 ((TextView)findViewById(R.id.textView2)).setText(Html.fromHtml(
                         "<font color='#6200EE'><b>Humidity :</b><br></font>"
-                                + "%.0f%%", (int) logBook.getHumidity() ));
+                                + logBook.getHumidity() + "%"));
                 ((TextView)findViewById(R.id.textView)).setText(Html.fromHtml(
                         "<font color='#6200EE'><b>Temperature :</b><br></font>"
                                 + logBook.getTemperature() +"\u00b0"+"C"));
             }
         });
-
-
-        btnStartService.setVisibility(View.VISIBLE);
-        btnStopService.setVisibility(View.GONE);
-
 
         // memngambil data user
         fAuth = FirebaseAuth.getInstance().getCurrentUser();
@@ -233,6 +229,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        btnStartService.setVisibility(View.VISIBLE);
+        btnStopService.setVisibility(View.GONE);
+
         //service button template.
         btnStartService.setText(Html.fromHtml(
                 "<font color='#6200EE'><b>Service :</b><br></font>"
@@ -245,6 +244,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         ));
 
 
+    }
+
+    public void upload(){
+        logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Log");
+        myRef.push().setValue(logBook);
     }
 
     public void logout(View view){
@@ -260,17 +266,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void startService(View view) {
-        Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
-        serviceIntent.putExtra("logBook", logBook);
-        startService(serviceIntent);
+        if (logBook.getLongitude() != 0 && logBook.getLatitude() != 0 && logBook.getHumidity() != 0 && logBook.getTemperature() != 0) {
+            Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+            loopingService = new Timer();
+            loopingService.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    upload();
+                }
+            }, 0, 60000);
 
-        btnStartService.setVisibility(View.GONE);
-        btnStopService.setVisibility(View.VISIBLE);
-        serviceStatus = true;
+
+            btnStartService.setVisibility(View.GONE);
+            btnStopService.setVisibility(View.VISIBLE);
+            serviceStatus = true;
+        } else {
+            Toast.makeText(this, "Can't start service", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void stopService(View view) {
-        stopService(new Intent(getBaseContext(), MyService.class));
+
+        loopingService.cancel();
+        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
 
         btnStartService.setVisibility(View.VISIBLE);
         btnStopService.setVisibility(View.GONE);
@@ -545,6 +563,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_TEMPERATURE_DATA)) {
                 temperature = Utilities.extractAmbientTemperature(characteristic);
 
+                if(Utilities.extractAmbientTemperature(characteristic) != logBook.getTemperature()){
+                    logBook.setTemperature(Utilities.extractAmbientTemperature(characteristic));
+                }
+
                 //Update the UI
                 final double finalTemperature = temperature;
                 runOnUiThread(new Runnable() {
@@ -559,6 +581,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             if (characteristic.getUuid().equals(UUID_CHARACTERISTIC_HUMIDITY_DATA)) {
                 humidity = Utilities.extractHumidity(characteristic);
+                if(Utilities.extractHumidity(characteristic) != logBook.getHumidity()){
+                    logBook.setHumidity(Utilities.extractHumidity(characteristic));
+                }
 
                 final double finalHumidity = humidity;
                 runOnUiThread(new Runnable() {
@@ -566,9 +591,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @SuppressLint("DefaultLocale")
                     @Override
                     public void run() {
-                        ((TextView)findViewById(R.id.textView2)).setText(String.format(String.valueOf(Html.fromHtml(
+                        ((TextView)findViewById(R.id.textView2)).setText(Html.fromHtml(
                                 "<font color='#6200EE'><b>Humidity :</b><br></font>"
-                                        + "%.0f%%", (int) finalHumidity))));
+                                        + finalHumidity + "%"));
                     }
                 });
             }
@@ -580,35 +605,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
 
-            if(temperature != logBook.getTemperature() || humidity != logBook.getHumidity()) {
-                if(temperature != logBook.getTemperature()){
-                    logBook.setTemperature(temperature);
+            logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
+            runOnUiThread(new Runnable() {
+                @SuppressLint("DefaultLocale")
+                @Override
+                public void run() {
+                    ((TextView)findViewById(R.id.textView3)).setText(Html.fromHtml(
+                            "<font color='#6200EE'><b>Diperbarui pada :</b><br></font>"
+                                    +logBook.getTime()));
                 }
-
-                if(humidity != logBook.getHumidity()){
-                    logBook.setHumidity(humidity);
-                }
-
-                logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
-                runOnUiThread(new Runnable() {
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public void run() {
-                        ((TextView)findViewById(R.id.textView3)).setText(Html.fromHtml(
-                                "<font color='#6200EE'><b>Diperbarui pada :</b><br></font>"
-                                        +logBook.getTime()));
-                    }
-                });
-
-                if(logBook.getHumidity() != 0 && logBook.getTemperature() != 0 && serviceStatus == true) {
-                    stopService(new Intent(getBaseContext(), MyService.class));
-
-                    Intent serviceIntent = new Intent(getBaseContext(), MyService.class);
-                    serviceIntent.putExtra("logBook", logBook);
-                    startService(serviceIntent);
-                    toast("Service dimulai Ulang");
-                }
-            }
+            });
 
             runOnUiThread(new Runnable() {
                 @SuppressLint("DefaultLocale")
