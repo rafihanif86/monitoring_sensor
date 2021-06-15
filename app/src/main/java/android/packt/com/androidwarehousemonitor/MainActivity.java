@@ -60,6 +60,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
         }
 
-        logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
+        logBook.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         runOnUiThread(new Runnable() {
             @SuppressLint("DefaultLocale")
             @Override
@@ -247,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void upload(){
-        logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
+        logBook.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Log");
         myRef.push().setValue(logBook);
@@ -300,7 +301,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        myRef.removeValue();
 //        Toast.makeText(this, "Telah di hapus", Toast.LENGTH_SHORT).show();
     }
-
 
     @SuppressLint("MissingPermission")
     private void getLocation() {
@@ -603,28 +603,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 gatt.readCharacteristic(gatt.getService(UUID_HUMIDITY_SERVICE).getCharacteristic(UUID_CHARACTERISTIC_HUMIDITY_DATA));
             }
 
-            logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
-
-            logBook.setTime(java.text.DateFormat.getDateTimeInstance().format(new Date()));
+            logBook.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             runOnUiThread(new Runnable() {
                 @SuppressLint("DefaultLocale")
                 @Override
                 public void run() {
                     ((TextView)findViewById(R.id.textView3)).setText(Html.fromHtml(
                             "<font color='#6200EE'><b>Diperbarui pada :</b><br></font>"
-                                    +logBook.getTime()));
+                                    + logBook.getTime()));
                 }
             });
 
-            runOnUiThread(new Runnable() {
-                @SuppressLint("DefaultLocale")
-                @Override
-                public void run() {
-                    ((TextView)findViewById(R.id.textView3)).setText(Html.fromHtml(
-                            "<font color='#6200EE'><b>Diperbarui pada :</b><br></font>"
-                                    +logBook.getTime()));
-                }
-            });
         }
 
         @Override
